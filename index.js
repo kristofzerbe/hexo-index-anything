@@ -58,8 +58,8 @@ Index.prototype.push = function(post) {
  * @return String
  */
 Index.prototype.getPath = function(key) {
-  // if `post_asset_folder` is set, place indexes in folders
-  if (hexo.config.post_asset_folder) {
+  // if `post_asset_folder` is set, place indexes in folders, except root index file
+  if (hexo.config.post_asset_folder && key !== 'index') {
     return path.join(
       S(this.path).slugify().s,
       key,
