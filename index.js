@@ -58,8 +58,8 @@ Index.prototype.push = function(post) {
  * @return String
  */
 Index.prototype.getPath = function(key) {
-  // if `post_asset_folder` is set, place indexes in folders, except root index file
-  if (hexo.config.post_asset_folder && key !== 'index') {
+  // if `post_asset_folder` is set, place indexes in folders
+  if (hexo.config.post_asset_folder && key !== "index") {
     return path.join(
       S(this.path).slugify().s,
       key,
@@ -108,14 +108,24 @@ Index.prototype.getPages = function() {
   return _.map(index.posts, function(posts, key) {
     // add handy methods for templates
     posts = _(posts)
+    let indexString = S(index.index).humanize().titleCase().s
+    let keyString = S(key).humanize().titleCase().s
+    let title = indexString
+    let template = hexo.config.indexAnything.templateIndex || 'index'
+    if (key !== 'index') { 
+      title += hexo.config.indexAnything.titleSeparator + keyString
+      template = hexo.config.indexAnything.templateKey || 'index'
+    }
     return {
       data: {
-        title: 'Index for ' + S(key).humanize().titleCase().s,
+        title: title,
+        index: indexString,
+        key: keyString,
         date: moment(),
         posts: posts
       },
       path: index.getPath(key),
-      layout: hexo.config.indexAnything.template || 'index'
+      layout: template
     }
   })
 }
