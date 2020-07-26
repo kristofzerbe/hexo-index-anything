@@ -128,13 +128,15 @@ Index.prototype.getPages = function() {
 
 if (typeof hexo === 'object') {
   hexo.extend.generator.register('indexAnything', function(locals) {
+    var config = this.config
     let indexes = []
     // created index instances according to config
     _.each(hexo.config.indexAnything, function(path, index) {
       indexes.push(new Index(index, path))
     })
+    var posts = locals.posts.sort(config.index_generator.order_by);
     // push each post to each index
-    _.each(locals.posts.data, function(post) {
+    _.each(posts.data, function(post) {
       _.each(indexes, function(index) {
         index.push(post)
       })
